@@ -3,12 +3,12 @@ import { getFirestore, collection, addDoc } from "https://www.gstatic.com/fireba
 
 // YOUR CONFIG HERE (Copy from Firebase Console)
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "your-project.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "your-sender-id",
-    appId: "your-app-id"
+  apiKey: "AIzaSyB9wVq525wCsxZmIZmfzj6Z5VjF2aSUu_g",
+  authDomain: "registervbs-83306.firebaseapp.com",
+  projectId: "registervbs-83306",
+  storageBucket: "registervbs-83306.firebasestorage.app",
+  messagingSenderId: "462529063270",
+  appId: "1:462529063270:web:40c1333dc7c450345300a7"
 };
 
 // Initialize Firebase
@@ -45,4 +45,5 @@ vbsForm.addEventListener('submit', async (e) => {
         submitBtn.disabled = false;
         submitBtn.innerText = "Register Explorer!";
     }
+
 });
