@@ -13,7 +13,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// SIMPLE LOCAL PASSWORD CHECK
+// LOCAL PASSWORD CHECK (Bypasses the buggy API Key error)
 document.getElementById('loginBtn').onclick = () => {
     const userInput = document.getElementById('passInput').value;
     
@@ -23,14 +23,13 @@ document.getElementById('loginBtn').onclick = () => {
         document.getElementById('adminContent').style.display = 'block';
         fetchExplorers();
     } else {
-        document.getElementById('err').textContent = "Incorrect Password. Try again.";
+        document.getElementById('err').textContent = "Incorrect Password.";
     }
 };
 
-// SHOW PASSWORD TOGGLE
+// Toggle Visibility
 document.getElementById('showPass').onclick = () => {
-    const passInput = document.getElementById('passInput');
-    passInput.type = document.getElementById('showPass').checked ? "text" : "password";
+    document.getElementById('passInput').type = document.getElementById('showPass').checked ? "text" : "password";
 };
 
 async function fetchExplorers() {
@@ -39,7 +38,6 @@ async function fetchExplorers() {
         const querySnapshot = await getDocs(collection(db, "registrations"));
         document.getElementById('loading').style.display = 'none';
         explorerList.innerHTML = ""; 
-        
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             const id = docSnap.id;
@@ -55,13 +53,12 @@ async function fetchExplorers() {
             explorerList.appendChild(li);
         });
     } catch (e) {
-        // If this fails, you need to set Firestore Rules to "allow read: if true"
-        document.getElementById('err').textContent = "Database Error. Check your Firestore Rules.";
+        document.getElementById('err').textContent = "Database Error. Check Firestore Rules.";
     }
 }
 
 window.deleteEntry = async (id) => {
-    if (confirm("Permanently delete this explorer?")) {
+    if (confirm("Delete this explorer?")) {
         await deleteDoc(doc(db, "registrations", id));
         location.reload();
     }
