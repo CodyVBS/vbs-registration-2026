@@ -1,8 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// VERIFIED API KEY FOR PROJECT: registervbs-83306
 const firebaseConfig = {
     apiKey: "AIzaSyB9wvQ525wCsxZmIZmfzj6Z5VjF2aSUu_g",
     authDomain: "registervbs-83306.firebaseapp.com",
@@ -13,52 +11,35 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-// AUTH STATE - Auto-redirects if already logged in
-onAuthStateChanged(auth, (user) => {
-    if (user) {
+// SIMPLE LOCAL PASSWORD CHECK
+document.getElementById('loginBtn').onclick = () => {
+    const userInput = document.getElementById('passInput').value;
+    
+    // Set your manual password here
+    if (userInput === "VBS2026") { 
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
         fetchExplorers();
     } else {
-        document.getElementById('loginOverlay').style.display = 'block';
-        document.getElementById('adminContent').style.display = 'none';
+        document.getElementById('err').textContent = "Incorrect Password. Try again.";
     }
-});
+};
 
-// PASSWORD VISIBILITY TOGGLE
+// SHOW PASSWORD TOGGLE
 document.getElementById('showPass').onclick = () => {
     const passInput = document.getElementById('passInput');
     passInput.type = document.getElementById('showPass').checked ? "text" : "password";
 };
 
-// LOGIN ACTION
-document.getElementById('loginBtn').onclick = async () => {
-    const email = "pettysw@gmail.com"; // Verified User
-    const password = document.getElementById('passInput').value;
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-        // This displays the specific reason for failure on the screen
-        document.getElementById('err').textContent = "Login Error: " + error.message;
-    }
-};
-
-// LOGOUT ACTION
-document.getElementById('logoutBtn').onclick = async () => {
-    await signOut(auth);
-    location.reload();
-};
-
-// DATA LOAD
 async function fetchExplorers() {
     const explorerList = document.getElementById('explorerList');
     try {
         const querySnapshot = await getDocs(collection(db, "registrations"));
         document.getElementById('loading').style.display = 'none';
         explorerList.innerHTML = ""; 
+        
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             const id = docSnap.id;
@@ -74,15 +55,14 @@ async function fetchExplorers() {
             explorerList.appendChild(li);
         });
     } catch (e) {
-        console.error("Fetch Error:", e);
+        // If this fails, you need to set Firestore Rules to "allow read: if true"
+        document.getElementById('err').textContent = "Database Error. Check your Firestore Rules.";
     }
 }
 
-// DELETE ACTION
 window.deleteEntry = async (id) => {
     if (confirm("Permanently delete this explorer?")) {
         await deleteDoc(doc(db, "registrations", id));
         location.reload();
     }
 };
-
