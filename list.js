@@ -22,8 +22,9 @@ const explorerList = document.getElementById('explorerList');
 const loginBtn = document.getElementById('loginBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 const passInput = document.getElementById('passInput');
+const showPass = document.getElementById('showPass');
 
-// 1. MONITOR AUTH STATE (Keeps user logged in on refresh)
+// 1. MONITOR AUTH STATE
 onAuthStateChanged(auth, (user) => {
     if (user) {
         loginOverlay.style.display = 'none';
@@ -35,10 +36,14 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// 2. SECURE LOGIN LOGIC
+// 2. SHOW PASSWORD TOGGLE
+showPass.onclick = () => {
+    passInput.type = showPass.checked ? "text" : "password";
+};
+
+// 3. SECURE LOGIN
 loginBtn.onclick = async () => {
-    // Replace this email with the one you created in Firebase Auth Users tab
-    const email = "admin@yourchurch.com"; 
+    const email = "admin@yourchurch.com"; // MUST MATCH FIREBASE AUTH USERS TAB
     const password = passInput.value;
 
     try {
@@ -49,23 +54,18 @@ loginBtn.onclick = async () => {
     }
 };
 
-// 3. SECURE SIGN OUT
+// 4. SIGN OUT
 logoutBtn.onclick = async () => {
     await signOut(auth);
     location.reload();
 };
 
-// 4. DATA RETRIEVAL & DELETE LOGIC
+// 5. DATA RETRIEVAL & DELETE
 async function fetchExplorers() {
     try {
         const querySnapshot = await getDocs(collection(db, "registrations"));
         document.getElementById('loading').style.display = 'none';
         explorerList.innerHTML = ""; 
-
-        if (querySnapshot.empty) {
-            explorerList.innerHTML = "<li style='text-align:center;'>No explorers found in orbit.</li>";
-            return;
-        }
 
         querySnapshot.forEach((documentSnapshot) => {
             const data = documentSnapshot.data();
@@ -74,25 +74,20 @@ async function fetchExplorers() {
             const li = document.createElement('li');
             li.innerHTML = `
                 <div class="explorer-info">
-                    <span class="explorer-name">${data.childName}</span>
-                    <span class="explorer-details">
-                        Grade: ${data.grade} | Age: ${data.age}<br>
-                        Parent: ${data.email} | Phone: ${data.phone}<br>
-                        Allergies: ${data.allergies || 'None'}
-                    </span>
+                    <span class="explorer-name">${data.childName}</span><br>
+                    <span class="explorer-details">Grade: ${data.grade} | Parent: ${data.email}</span>
                 </div>
                 <button class="delete-btn" data-id="${id}">Delete</button>
             `;
             explorerList.appendChild(li);
         });
 
-        // Attach Delete Listeners
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.onclick = async (e) => {
                 const docId = e.target.getAttribute('data-id');
                 if (confirm("Permanently delete this explorer record?")) {
                     await deleteDoc(doc(db, "registrations", docId));
-                    fetchExplorers(); // Refresh list after deletion
+                    fetchExplorers();
                 }
             };
         });
