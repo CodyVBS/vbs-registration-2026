@@ -11,6 +11,7 @@ const firebaseConfig = {
   appId: "1:462529063270:web:40c1333dc7c450345300a7"
 };
 
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -36,7 +37,24 @@ vbsForm.addEventListener('submit', async (e) => {
             timestamp: new Date()
         });
 
-        document.getElementById('message').innerText = "🎉 Registration Successful! See you at VBS!";
+        try {
+        await addDoc(collection(db, "registrations"), {
+            childName: document.getElementById('childName').value,
+            age: document.getElementById('childAge').value,
+            grade: document.getElementById('grade').value,
+            email: document.getElementById('parentEmail').value,
+            phone: document.getElementById('parentPhone').value,
+            allergies: document.getElementById('allergies').value,
+            timestamp: new Date()
+        });
+
+        // This is the new line that sends them to the success page
+        window.location.href = "success.html"; 
+        
+    } catch (error) {
+        console.error("Error adding document: ", error);
+        alert("Registration failed. Check the console for errors.");
+    }
         vbsForm.reset();
     } catch (error) {
         console.error("Error adding document: ", error);
@@ -45,5 +63,4 @@ vbsForm.addEventListener('submit', async (e) => {
         submitBtn.disabled = false;
         submitBtn.innerText = "Register Explorer!";
     }
-
 });
