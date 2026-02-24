@@ -36,7 +36,7 @@ document.getElementById('showPass').onclick = () => {
 
 // LOGIN ACTION
 document.getElementById('loginBtn').onclick = async () => {
-    const email = "admin@yourchurch.com"; // Verified User
+    const email = "pettysw@gmail.com"; // Verified User
     const password = document.getElementById('passInput').value;
     try {
         await signInWithEmailAndPassword(auth, email, password);
@@ -85,3 +85,4 @@ window.deleteEntry = async (id) => {
         location.reload();
     }
 };
+
