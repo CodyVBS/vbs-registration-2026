@@ -1,7 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Your verified Firebase Config
+// VERIFIED CONFIG
 const firebaseConfig = {
     apiKey: "AIzaSyB9wvQ525wCsxZmIZmfzj6Z5VjF2aSUu_g",
     authDomain: "registervbs-83306.firebaseapp.com",
@@ -12,52 +13,92 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 const loginOverlay = document.getElementById('loginOverlay');
 const adminContent = document.getElementById('adminContent');
-const loginBtn = document.getElementById('loginBtn');
-const passInput = document.getElementById('passInput');
 const explorerList = document.getElementById('explorerList');
+const loginBtn = document.getElementById('loginBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+const passInput = document.getElementById('passInput');
 
-// The Lock Logic
-loginBtn.onclick = () => {
-    // CURRENT PASSWORD: VBS2026
-    if (passInput.value === "VBS2026") {
+// 1. MONITOR AUTH STATE (Keeps user logged in on refresh)
+onAuthStateChanged(auth, (user) => {
+    if (user) {
         loginOverlay.style.display = 'none';
         adminContent.style.display = 'block';
         fetchExplorers();
     } else {
-        document.getElementById('err').textContent = "Incorrect password. Please try again.";
+        loginOverlay.style.display = 'block';
+        adminContent.style.display = 'none';
+    }
+});
+
+// 2. SECURE LOGIN LOGIC
+loginBtn.onclick = async () => {
+    // Replace this email with the one you created in Firebase Auth Users tab
+    const email = "admin@yourchurch.com"; 
+    const password = passInput.value;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+        document.getElementById('err').textContent = "Access Denied: Invalid Credentials";
+        console.error("Login Error:", error);
     }
 };
 
-// The Data Fetching Logic
+// 3. SECURE SIGN OUT
+logoutBtn.onclick = async () => {
+    await signOut(auth);
+    location.reload();
+};
+
+// 4. DATA RETRIEVAL & DELETE LOGIC
 async function fetchExplorers() {
     try {
         const querySnapshot = await getDocs(collection(db, "registrations"));
         document.getElementById('loading').style.display = 'none';
-        
+        explorerList.innerHTML = ""; 
+
         if (querySnapshot.empty) {
-            explorerList.innerHTML = "<li>No explorers registered yet.</li>";
+            explorerList.innerHTML = "<li style='text-align:center;'>No explorers found in orbit.</li>";
             return;
         }
 
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
+        querySnapshot.forEach((documentSnapshot) => {
+            const data = documentSnapshot.data();
+            const id = documentSnapshot.id;
+            
             const li = document.createElement('li');
             li.innerHTML = `
-                <span class="explorer-name">${data.childName}</span>
-                <span class="explorer-details">
-                    Age: ${data.age} | Grade: ${data.grade}<br>
-                    Parent: ${data.email} | Phone: ${data.phone}<br>
-                    Allergies: ${data.allergies || 'None'}
-                </span>
+                <div class="explorer-info">
+                    <span class="explorer-name">${data.childName}</span>
+                    <span class="explorer-details">
+                        Grade: ${data.grade} | Age: ${data.age}<br>
+                        Parent: ${data.email} | Phone: ${data.phone}<br>
+                        Allergies: ${data.allergies || 'None'}
+                    </span>
+                </div>
+                <button class="delete-btn" data-id="${id}">Delete</button>
             `;
             explorerList.appendChild(li);
         });
+
+        // Attach Delete Listeners
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.onclick = async (e) => {
+                const docId = e.target.getAttribute('data-id');
+                if (confirm("Permanently delete this explorer record?")) {
+                    await deleteDoc(doc(db, "registrations", docId));
+                    fetchExplorers(); // Refresh list after deletion
+                }
+            };
+        });
+
     } catch (error) {
-        console.error("Error fetching explorers:", error);
-        document.getElementById('loading').textContent = "Error: Access Denied. Check Firestore Rules.";
+        console.error("Fetch Error:", error);
+        document.getElementById('loading').textContent = "Security Error: Check Firestore Rules.";
     }
 }
