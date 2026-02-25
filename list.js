@@ -53,7 +53,7 @@ async function fetchExplorers() {
                     </span>
                 </div>
                 <button onclick="window.deleteEntry('${id}')" 
-                        style="background:#e74c3c; color:white; border:none; padding:8px 0; cursor:pointer; border-radius:4px; width: 80px; min-width: 80px; text-align: center; font-weight: bold;">
+                        style="background:#e74c3c; color:white; border:none; padding:8px 0; border-radius:4px; width: 80px; min-width: 80px; font-weight: bold; cursor:pointer;">
                     Delete
                 </button>
             `;
