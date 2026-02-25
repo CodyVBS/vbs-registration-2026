@@ -1,4 +1,43 @@
-// ... (keep the firebaseConfig and login logic the same as before)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB9wvQ525wCsxZmIZmfzj6Z5VjF2aSUu_g",
+    authDomain: "registervbs-83306.firebaseapp.com",
+    projectId: "registervbs-83306",
+    storageBucket: "registervbs-83306.firebasestorage.app",
+    messagingSenderId: "462529063270",
+    appId: "1:462529063270:web:40c1333dc7c450345300a7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Logic to wait for the page to load before attaching the button click
+window.onload = () => {
+    const loginBtn = document.getElementById('loginBtn');
+    if(loginBtn) {
+        loginBtn.onclick = () => {
+            const userInput = document.getElementById('passInput').value;
+            // Password check
+            if (userInput === "VBS2026") { 
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                fetchExplorers();
+            } else {
+                const errDiv = document.getElementById('err');
+                if(errDiv) errDiv.textContent = "Incorrect Password.";
+            }
+        };
+    }
+
+    const showPass = document.getElementById('showPass');
+    if(showPass) {
+        showPass.onclick = () => {
+            document.getElementById('passInput').type = showPass.checked ? "text" : "password";
+        };
+    }
+};
 
 async function fetchExplorers() {
     const explorerList = document.getElementById('explorerList');
@@ -6,7 +45,9 @@ async function fetchExplorers() {
     
     try {
         const querySnapshot = await getDocs(collection(db, "registrations"));
-        document.getElementById('loading').style.display = 'none';
+        const loadingMsg = document.getElementById('loading');
+        if(loadingMsg) loadingMsg.style.display = 'none';
+        
         explorerList.innerHTML = ""; 
         countDisplay.textContent = querySnapshot.size;
 
@@ -25,13 +66,22 @@ async function fetchExplorers() {
                     </span>
                 </div>
                 <button onclick="window.deleteEntry('${id}')" 
-                        style="background:#e74c3c; color:white; border:none; padding:8px 0; cursor:pointer; border-radius:4px; width: 80px; min-width: 80px; text-align: center; font-weight: bold;">
+                        style="background:#e74c3c; color:white; border:none; padding:8px 0; border-radius:4px; width: 80px; min-width: 80px; text-align: center; font-weight: bold; cursor:pointer;">
                     Delete
                 </button>
             `;
             explorerList.appendChild(li);
         });
     } catch (e) {
-        document.getElementById('err').textContent = "Database Error.";
+        console.error(e);
+        const errDiv = document.getElementById('err');
+        if(errDiv) errDiv.textContent = "Database Error. Check Firestore Rules.";
     }
 }
+
+window.deleteEntry = async (id) => {
+    if (confirm("Permanently delete this explorer?")) {
+        await deleteDoc(doc(db, "registrations", id));
+        fetchExplorers();
+    }
+};
