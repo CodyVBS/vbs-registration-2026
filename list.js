@@ -13,11 +13,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// LOCAL PASSWORD CHECK (Bypasses the buggy API Key error)
+// Simple Password Logic
 document.getElementById('loginBtn').onclick = () => {
     const userInput = document.getElementById('passInput').value;
-    
-    // Set your manual password here
     if (userInput === "VBS2026") { 
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
@@ -27,17 +25,22 @@ document.getElementById('loginBtn').onclick = () => {
     }
 };
 
-// Toggle Visibility
 document.getElementById('showPass').onclick = () => {
     document.getElementById('passInput').type = document.getElementById('showPass').checked ? "text" : "password";
 };
 
 async function fetchExplorers() {
     const explorerList = document.getElementById('explorerList');
+    const countDisplay = document.getElementById('totalCount');
+    
     try {
         const querySnapshot = await getDocs(collection(db, "registrations"));
         document.getElementById('loading').style.display = 'none';
         explorerList.innerHTML = ""; 
+        
+        // Update Total Count
+        countDisplay.textContent = querySnapshot.size;
+
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             const id = docSnap.id;
@@ -45,7 +48,7 @@ async function fetchExplorers() {
             li.style.cssText = "display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:10px 0;";
             li.innerHTML = `
                 <div>
-                    <strong>${data.childName}</strong> (Grade: ${data.grade})<br>
+                    <strong>${data.lastName}, ${data.firstName}</strong> (Grade: ${data.grade})<br>
                     Parent: ${data.email} | Phone: ${data.phone}
                 </div>
                 <button onclick="window.deleteEntry('${id}')" style="background:#e74c3c; color:white; border:none; padding:8px; cursor:pointer; border-radius:4px;">Delete</button>
@@ -53,13 +56,13 @@ async function fetchExplorers() {
             explorerList.appendChild(li);
         });
     } catch (e) {
-        document.getElementById('err').textContent = "Database Error. Check Firestore Rules.";
+        document.getElementById('err').textContent = "Database Error. Ensure Firestore Rules are set to 'allow read: if true'";
     }
 }
 
 window.deleteEntry = async (id) => {
-    if (confirm("Delete this explorer?")) {
+    if (confirm("Permanently delete this explorer?")) {
         await deleteDoc(doc(db, "registrations", id));
-        location.reload();
+        fetchExplorers();
     }
 };
