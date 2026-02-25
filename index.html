@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>VBS 2026 Registration</h1>
+        <h1>🚀 VBS 2026 Registration</h1>
         <p>Register your child for an exciting week of exploration!</p>
         
         <form id="registrationForm">
@@ -36,6 +36,11 @@
             </div>
 
             <div class="form-group">
+                <label for="homeChurch">Home Church (if any)</label>
+                <input type="text" id="homeChurch" placeholder="Enter church name or 'None'">
+            </div>
+
+            <div class="form-group">
                 <label for="parentEmail">Parent Email</label>
                 <input type="email" id="parentEmail" required>
             </div>
@@ -47,9 +52,6 @@
 
             <button type="submit" id="submitBtn">Register Explorer</button>
         </form>
-        <div id="successMsg" style="display:none; color: green; margin-top: 20px;">
-            Success! Your child is registered.
-        </div>
     </div>
 
     <script type="module" src="app.js"></script>
