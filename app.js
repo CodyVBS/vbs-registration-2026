@@ -24,15 +24,14 @@ document.getElementById('registrationForm').onsubmit = async (e) => {
             firstName: document.getElementById('childFirstName').value,
             lastName: document.getElementById('childLastName').value,
             grade: document.getElementById('grade').value,
+            homeChurch: document.getElementById('homeChurch').value,
             email: document.getElementById('parentEmail').value,
             phone: document.getElementById('parentPhone').value,
             timestamp: new Date()
         });
 
-        document.getElementById('registrationForm').reset();
-        document.getElementById('successMsg').style.display = 'block';
-        btn.textContent = "Register Another Explorer";
-        btn.disabled = false;
+        // Redirect to separate success page
+        window.location.href = "success.html";
     } catch (error) {
         alert("Error saving registration: " + error.message);
         btn.disabled = false;
