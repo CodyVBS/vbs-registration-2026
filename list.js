@@ -1,33 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyB9wvQ525wCsxZmIZmfzj6Z5VjF2aSUu_g",
-    authDomain: "registervbs-83306.firebaseapp.com",
-    projectId: "registervbs-83306",
-    storageBucket: "registervbs-83306.firebasestorage.app",
-    messagingSenderId: "462529063270",
-    appId: "1:462529063270:web:40c1333dc7c450345300a7"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// Simple Password Logic
-document.getElementById('loginBtn').onclick = () => {
-    const userInput = document.getElementById('passInput').value;
-    if (userInput === "VBS2026") { 
-        document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('adminContent').style.display = 'block';
-        fetchExplorers();
-    } else {
-        document.getElementById('err').textContent = "Incorrect Password.";
-    }
-};
-
-document.getElementById('showPass').onclick = () => {
-    document.getElementById('passInput').type = document.getElementById('showPass').checked ? "text" : "password";
-};
+// ... (keep the firebaseConfig and login logic the same as before)
 
 async function fetchExplorers() {
     const explorerList = document.getElementById('explorerList');
@@ -49,24 +20,18 @@ async function fetchExplorers() {
                 <div style="flex-grow: 1; padding-right: 15px;">
                     <strong>${data.lastName}, ${data.firstName}</strong> (Grade: ${data.grade})<br>
                     <span style="font-size: 0.9em; color: #666;">
+                        Parent: ${data.parentName || 'N/A'}<br>
                         Church: ${data.homeChurch || 'None'} | Phone: ${data.phone}
                     </span>
                 </div>
                 <button onclick="window.deleteEntry('${id}')" 
-                        style="background:#e74c3c; color:white; border:none; padding:8px 0; border-radius:4px; width: 80px; min-width: 80px; font-weight: bold; cursor:pointer;">
+                        style="background:#e74c3c; color:white; border:none; padding:8px 0; cursor:pointer; border-radius:4px; width: 80px; min-width: 80px; text-align: center; font-weight: bold;">
                     Delete
                 </button>
             `;
             explorerList.appendChild(li);
         });
     } catch (e) {
-        document.getElementById('err').textContent = "Database Error. Check Firestore Rules.";
+        document.getElementById('err').textContent = "Database Error.";
     }
 }
-
-window.deleteEntry = async (id) => {
-    if (confirm("Permanently delete this explorer?")) {
-        await deleteDoc(doc(db, "registrations", id));
-        fetchExplorers();
-    }
-};
