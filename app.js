@@ -13,6 +13,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// --- PHONE NUMBER FORMATTER ---
+const phoneInput = document.getElementById('parentPhone');
+phoneInput.addEventListener('input', (e) => {
+    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+    e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+
+// --- FORM SUBMISSION ---
 document.getElementById('registrationForm').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
@@ -30,10 +38,9 @@ document.getElementById('registrationForm').onsubmit = async (e) => {
             timestamp: new Date()
         });
 
-        // Redirect to separate success page
         window.location.href = "success.html";
     } catch (error) {
-        alert("Error saving registration: " + error.message);
+        alert("Error: " + error.message);
         btn.disabled = false;
         btn.textContent = "Register Explorer";
     }
