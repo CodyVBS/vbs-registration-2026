@@ -15,10 +15,12 @@ const db = getFirestore(app);
 
 // Phone Number Auto-Formatter
 const phoneInput = document.getElementById('parentPhone');
-phoneInput.addEventListener('input', (e) => {
-    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-    e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
-});
+if (phoneInput) {
+    phoneInput.addEventListener('input', (e) => {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
+}
 
 // Form Submission
 document.getElementById('registrationForm').onsubmit = async (e) => {
@@ -33,9 +35,9 @@ document.getElementById('registrationForm').onsubmit = async (e) => {
             lastName: document.getElementById('childLastName').value,
             grade: document.getElementById('grade').value,
             parentName: document.getElementById('parentName').value,
-            homeChurch: document.getElementById('homeChurch').value,
-            email: document.getElementById('parentEmail').value,
             phone: document.getElementById('parentPhone').value,
+            email: document.getElementById('parentEmail').value,
+            homeChurch: document.getElementById('homeChurch').value,
             timestamp: new Date()
         });
 
