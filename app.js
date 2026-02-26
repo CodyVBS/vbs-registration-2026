@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB9wvQ525wCsxZmIZmfzj6Z5VjF2aSUu_g",
@@ -13,81 +13,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Fix login button responsiveness with modern listener
-document.addEventListener('DOMContentLoaded', () => {
-    const loginBtn = document.getElementById('loginBtn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-            const userInput = document.getElementById('passInput').value;
-            // Secret admin password check
-            if (userInput === "VBS2026") { 
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('adminContent').style.display = 'block';
-                fetchExplorers();
-            } else {
-                const errDiv = document.getElementById('err');
-                if (errDiv) errDiv.textContent = "Incorrect Password.";
-            }
-        });
-    }
-
-    const showPass = document.getElementById('showPass');
-    if (showPass) {
-        showPass.onclick = () => {
-            document.getElementById('passInput').type = showPass.checked ? "text" : "password";
-        };
-    }
-});
-
-async function fetchExplorers() {
-    const explorerList = document.getElementById('explorerList');
-    const countDisplay = document.getElementById('totalCount');
-    
-    try {
-        const querySnapshot = await getDocs(collection(db, "registrations"));
-        const loadingMsg = document.getElementById('loading');
-        if (loadingMsg) loadingMsg.style.display = 'none';
-        
-        explorerList.innerHTML = ""; 
-        // Display total registered count
-        countDisplay.textContent = querySnapshot.size;
-
-        querySnapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            const id = docSnap.id;
-            const li = document.createElement('li');
-            li.style.cssText = "display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:12px 0;";
-            
-            // Reordered Admin Display Template
-            // Order: Parent Name -> Phone -> Email -> Home Church
-            li.innerHTML = `
-                <div style="flex-grow: 1; padding-right: 15px;">
-                    <strong>${data.lastName}, ${data.firstName}</strong> (Grade: ${data.grade})<br>
-                    <span style="font-size: 0.9em; color: #666;">
-                        Parent: ${data.parentName || 'N/A'}<br>
-                        Phone: ${data.phone}<br>
-                        Email: ${data.email || 'N/A'}<br>
-                        Church: ${data.homeChurch || 'None'}
-                    </span>
-                </div>
-                <button onclick="window.deleteEntry('${id}')" 
-                        style="background:#e74c3c; color:white; border:none; padding:8px 0; border-radius:4px; width: 80px; min-width: 80px; text-align: center; font-weight: bold; cursor:pointer;">
-                    Delete
-                </button>
-            `;
-            explorerList.appendChild(li);
-        });
-    } catch (e) {
-        const errDiv = document.getElementById('err');
-        if (errDiv) errDiv.textContent = "Database Error. Ensure Firebase Rules are correct.";
-    }
+// Phone Number Auto-Formatter
+const phoneInput = document.getElementById('parentPhone');
+if (phoneInput) {
+    phoneInput.addEventListener('input', (e) => {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
 }
 
-// Global delete function
-window.deleteEntry = async (id) => {
-    if (confirm("Permanently delete this explorer?")) {
-        await deleteDoc(doc(db, "registrations", id));
-        fetchExplorers();
+// Form Submission
+document.getElementById('registrationForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = "Registering...";
+
+    try {
+        await addDoc(collection(db, "registrations"), {
+            firstName: document.getElementById('childFirstName').value,
+            lastName: document.getElementById('childLastName').value,
+            grade: document.getElementById('grade').value,
+            parentName: document.getElementById('parentName').value,
+            phone: document.getElementById('parentPhone').value,
+            email: document.getElementById('parentEmail').value,
+            homeChurch: document.getElementById('homeChurch').value,
+            timestamp: new Date()
+        });
+
+        window.location.href = "success.html";
+    } catch (error) {
+        alert("Error saving registration: " + error.message);
+        btn.disabled = false;
+        btn.textContent = "Register Explorer";
     }
 };
-
