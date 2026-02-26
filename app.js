@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyB9wvQ525wCsxZmIZmfzj6Z5VjF2aSUu_g",
+    apiKey: "AIzaSyB9wvQ525wCsxZmIZmfzj|F2aSUu_g",
     authDomain: "registervbs-83306.firebaseapp.com",
     projectId: "registervbs-83306",
     storageBucket: "registervbs-83306.firebasestorage.app",
@@ -22,7 +22,7 @@ if (phoneInput) {
     });
 }
 
-// Form Submission
+// Form Submission with complete parent data
 document.getElementById('registrationForm').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
