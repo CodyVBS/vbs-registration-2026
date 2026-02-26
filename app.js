@@ -13,7 +13,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// --- Robust Phone Formatter for Mac Browsers ---
 const phoneInput = document.getElementById('parentPhone');
 if (phoneInput) {
     phoneInput.oninput = (e) => {
@@ -28,13 +27,11 @@ if (phoneInput) {
     };
 }
 
-// --- Form Submission Logic ---
 document.getElementById('registrationForm').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
-    
-    // Explicit email verification
     const emailValue = document.getElementById('parentEmail').value;
+    
     if (!emailValue.includes('@')) {
         alert("Please enter a valid email address.");
         return;
@@ -61,4 +58,3 @@ document.getElementById('registrationForm').onsubmit = async (e) => {
         btn.textContent = "Register Explorer";
     }
 };
-
