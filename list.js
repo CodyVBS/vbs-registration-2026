@@ -13,31 +13,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Logic to wait for the page to load before attaching the button click
-window.onload = () => {
+// Use DOMContentLoaded to fix the non-working login button
+document.addEventListener('DOMContentLoaded', () => {
     const loginBtn = document.getElementById('loginBtn');
-    if(loginBtn) {
-        loginBtn.onclick = () => {
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
             const userInput = document.getElementById('passInput').value;
-            // Password check
             if (userInput === "VBS2026") { 
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('adminContent').style.display = 'block';
                 fetchExplorers();
             } else {
                 const errDiv = document.getElementById('err');
-                if(errDiv) errDiv.textContent = "Incorrect Password.";
+                if (errDiv) errDiv.textContent = "Incorrect Password.";
             }
-        };
+        });
     }
 
     const showPass = document.getElementById('showPass');
-    if(showPass) {
+    if (showPass) {
         showPass.onclick = () => {
             document.getElementById('passInput').type = showPass.checked ? "text" : "password";
         };
     }
-};
+});
 
 async function fetchExplorers() {
     const explorerList = document.getElementById('explorerList');
@@ -46,7 +45,7 @@ async function fetchExplorers() {
     try {
         const querySnapshot = await getDocs(collection(db, "registrations"));
         const loadingMsg = document.getElementById('loading');
-        if(loadingMsg) loadingMsg.style.display = 'none';
+        if (loadingMsg) loadingMsg.style.display = 'none';
         
         explorerList.innerHTML = ""; 
         countDisplay.textContent = querySnapshot.size;
@@ -73,9 +72,8 @@ async function fetchExplorers() {
             explorerList.appendChild(li);
         });
     } catch (e) {
-        console.error(e);
         const errDiv = document.getElementById('err');
-        if(errDiv) errDiv.textContent = "Database Error. Check Firestore Rules.";
+        if (errDiv) errDiv.textContent = "Database Error.";
     }
 }
 
