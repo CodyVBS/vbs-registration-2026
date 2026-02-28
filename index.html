@@ -4,27 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VBS 2026 Registration</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div style="text-align: center;">
-            <img src="ico.png" alt="VBS Icon" style="width: 100px; height: auto;">
+            <img src="favicon.png" alt="VBS Icon" style="width: 150px; height: auto; margin-bottom: 20px;">
         </div>
         <h1>VBS 2026 Registration</h1>
-        <p>Register your child for an exciting week of exploration!</p>
         
         <form id="registrationForm">
             <div class="form-group">
                 <label for="childFirstName">Child's First Name</label>
                 <input type="text" id="childFirstName" required>
             </div>
-
             <div class="form-group">
                 <label for="childLastName">Child's Last Name</label>
                 <input type="text" id="childLastName" required>
             </div>
-
             <div class="form-group">
                 <label for="grade">Grade (Entering in Fall)</label>
                 <select id="grade" required>
@@ -37,31 +35,36 @@
                     <option value="5">5th Grade</option>
                 </select>
             </div>
+            
+            <div class="form-group">
+                <label for="medicalInfo">Allergies/Medical Conditions/Special Notes</label>
+                <textarea id="medicalInfo" rows="3" placeholder="Enter any allergies or special needs..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="pickupNames">Name(s) of person(s) who may pick up this child</label>
+                <input type="text" id="pickupNames" placeholder="Authorized pickup names" required>
+            </div>
 
             <div class="form-group">
                 <label for="parentName">Parent's Full Name</label>
                 <input type="text" id="parentName" required>
             </div>
-
             <div class="form-group">
                 <label for="parentPhone">Emergency Contact Phone</label>
                 <input type="tel" id="parentPhone" maxlength="14" placeholder="(555) 555-5555" required>
             </div>
-
             <div class="form-group">
                 <label for="parentEmail">Parent Email</label>
                 <input type="email" id="parentEmail" placeholder="name@example.com" required>
             </div>
-
             <div class="form-group">
                 <label for="homeChurch">Home Church (if any)</label>
                 <input type="text" id="homeChurch" placeholder="Enter church name or 'None'">
             </div>
-
             <button type="submit" id="submitBtn">Register Explorer</button>
         </form>
     </div>
-
     <script type="module" src="app.js"></script>
 </body>
 </html>
