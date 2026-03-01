@@ -13,6 +13,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Phone Formatter
 const phoneInput = document.getElementById('parentPhone');
 if (phoneInput) {
     phoneInput.oninput = (e) => {
@@ -30,13 +31,6 @@ if (phoneInput) {
 document.getElementById('registrationForm').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
-    const emailValue = document.getElementById('parentEmail').value;
-    
-    if (!emailValue.includes('@')) {
-        alert("Please enter a valid email address.");
-        return;
-    }
-
     btn.disabled = true;
     btn.textContent = "Registering...";
 
@@ -45,16 +39,11 @@ document.getElementById('registrationForm').onsubmit = async (e) => {
             firstName: document.getElementById('childFirstName').value,
             lastName: document.getElementById('childLastName').value,
             grade: document.getElementById('grade').value,
+            medicalInfo: document.getElementById('medicalInfo').value,
+            pickupNames: document.getElementById('pickupNames').value,
             parentName: document.getElementById('parentName').value,
             phone: document.getElementById('parentPhone').value,
-            email: emailValue,
+            email: document.getElementById('parentEmail').value,
             homeChurch: document.getElementById('homeChurch').value,
             timestamp: new Date()
         });
-        window.location.href = "success.html";
-    } catch (error) {
-        alert("Error saving data: " + error.message);
-        btn.disabled = false;
-        btn.textContent = "Register Explorer";
-    }
-};
