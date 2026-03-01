@@ -28,13 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    const showPass = document.getElementById('showPass');
-    if (showPass) {
-        showPass.onclick = () => {
-            document.getElementById('passInput').type = showPass.checked ? "text" : "password";
-        };
-    }
 });
 
 async function fetchExplorers() {
@@ -43,9 +36,6 @@ async function fetchExplorers() {
     
     try {
         const querySnapshot = await getDocs(collection(db, "registrations"));
-        const loadingMsg = document.getElementById('loading');
-        if (loadingMsg) loadingMsg.style.display = 'none';
-        
         explorerList.innerHTML = ""; 
         countDisplay.textContent = querySnapshot.size;
 
@@ -53,33 +43,41 @@ async function fetchExplorers() {
             const data = docSnap.data();
             const id = docSnap.id;
             const li = document.createElement('li');
-            li.style.cssText = "display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:12px 0;";
+            li.style.cssText = "border-bottom:2px solid #3498db; padding:15px 0; list-style:none;";
             
             li.innerHTML = `
-                <div style="flex-grow: 1; padding-right: 15px;">
-                    <strong>${data.lastName}, ${data.firstName}</strong> (Grade: ${data.grade})<br>
-                    <span style="font-size: 0.9em; color: #666;">
-                        Parent: ${data.parentName || 'N/A'}<br>
-                        Phone: ${data.phone}<br>
-                        Email: ${data.email || 'N/A'}<br>
-                        Church: ${data.homeChurch || 'None'}
-                    </span>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div style="flex-grow: 1;">
+                        <strong style="font-size:1.2em; color:#2c3e50;">${data.lastName}, ${data.firstName}</strong> 
+                        <span style="background:#3498db; color:white; padding:2px 8px; border-radius:12px; font-size:0.8em; margin-left:10px;">Grade ${data.grade}</span><br>
+                        
+                        <div style="margin-top:8px; font-size:0.95em; line-height:1.4;">
+                            <strong>Parent:</strong> ${data.parentName}<br>
+                            <strong>Phone:</strong> ${data.phone} | <strong>Email:</strong> ${data.email}<br>
+                            <strong>Church:</strong> ${data.homeChurch || 'None'}<br>
+                            <div style="background:#fff3cd; padding:5px; border-radius:4px; margin-top:5px;">
+                                <strong>Medical/Allergies:</strong> ${data.medicalInfo || 'None'}
+                            </div>
+                            <div style="background:#d4edda; padding:5px; border-radius:4px; margin-top:5px;">
+                                <strong>Authorized Pickup:</strong> ${data.pickupNames}
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="window.deleteEntry('${id}')" 
+                            style="background:#e74c3c; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; font-weight:bold;">
+                        Delete
+                    </button>
                 </div>
-                <button onclick="window.deleteEntry('${id}')" 
-                        style="background:#e74c3c; color:white; border:none; padding:8px 0; border-radius:4px; width: 80px; min-width: 80px; text-align: center; font-weight: bold; cursor:pointer;">
-                    Delete
-                </button>
             `;
             explorerList.appendChild(li);
         });
     } catch (e) {
-        const errDiv = document.getElementById('err');
-        if (errDiv) errDiv.textContent = "Database Error.";
+        console.error(e);
     }
 }
 
 window.deleteEntry = async (id) => {
-    if (confirm("Permanently delete this explorer?")) {
+    if (confirm("Permanently delete this child's record?")) {
         await deleteDoc(doc(db, "registrations", id));
         fetchExplorers();
     }
