@@ -7,7 +7,6 @@
     <link rel="icon" type="image/png" href="ico.png">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Shortened Grade layout: Label and Dropdown on one line */
         .grade-row {
             display: flex;
             align-items: center;
@@ -15,7 +14,7 @@
             margin-bottom: 20px;
         }
         select#grade {
-            width: 160px; /* Shortened width */
+            width: 160px;
             padding: 8px;
             border: 2px solid #3498db;
             border-radius: 8px;
@@ -28,12 +27,15 @@
             background-position: right 10px center;
             background-size: 14px;
         }
-        /* Vertical alignment for Medical Info */
-        .medical-group {
+        /* Vertical alignment for text areas and pickup box */
+        .vertical-group {
             display: flex;
             flex-direction: column;
             gap: 5px;
             margin-bottom: 20px;
+        }
+        .vertical-group label {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -84,12 +86,12 @@
                 <input type="text" id="homeChurch" placeholder="Enter church name or 'None'">
             </div>
 
-            <div class="medical-group">
-                <label for="medicalInfo" style="font-weight:bold;">Allergies/Medical Conditions Special notes</label>
+            <div class="vertical-group">
+                <label for="medicalInfo">Allergies/Medical Conditions Special notes</label>
                 <textarea id="medicalInfo" rows="3" placeholder="Enter any allergies or special needs..."></textarea>
             </div>
 
-            <div class="form-group">
+            <div class="vertical-group">
                 <label for="pickupNames">Name(s) of person(s) who may pick up this child from VBS</label>
                 <input type="text" id="pickupNames" placeholder="Authorized pickup names" required>
             </div>
