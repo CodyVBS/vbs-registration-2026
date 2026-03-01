@@ -20,14 +20,15 @@
     </div>
 
     <div id="adminContent" class="container" style="display:none;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
             <h1>VBS 2026 Roster</h1>
             <div style="text-align:right;">
+                <button id="downloadBtn" style="padding:10px 15px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold; margin-right:10px;">Download Roster</button>
                 <strong>Total Children: </strong><span id="totalCount">0</span>
             </div>
         </div>
         <hr>
-        <ul id="explorerList" style="padding:0;">
+        <ul id="explorerList" style="padding:0; list-style:none;">
             <li id="loading">Loading registrations...</li>
         </ul>
     </div>
