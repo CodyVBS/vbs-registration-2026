@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VBS 2026 Registration</title>
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="ico.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div style="text-align: center;">
-            <img src="favicon.png" alt="VBS Icon" style="width: 150px; height: auto; margin-bottom: 20px;">
+            <img src="ico.png" alt="VBS Icon" style="width: 150px; height: auto; margin-bottom: 20px;">
         </div>
         <h1>VBS 2026 Registration</h1>
         
@@ -37,16 +37,6 @@
             </div>
             
             <div class="form-group">
-                <label for="medicalInfo">Allergies/Medical Conditions/Special Notes</label>
-                <textarea id="medicalInfo" rows="3" placeholder="Enter any allergies or special needs..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="pickupNames">Name(s) of person(s) who may pick up this child</label>
-                <input type="text" id="pickupNames" placeholder="Authorized pickup names" required>
-            </div>
-
-            <div class="form-group">
                 <label for="parentName">Parent's Full Name</label>
                 <input type="text" id="parentName" required>
             </div>
@@ -62,6 +52,17 @@
                 <label for="homeChurch">Home Church (if any)</label>
                 <input type="text" id="homeChurch" placeholder="Enter church name or 'None'">
             </div>
+
+            <div class="form-group">
+                <label for="medicalInfo">Allergies/Medical Conditions Special notes</label>
+                <textarea id="medicalInfo" rows="3" placeholder="Enter any allergies or special needs..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="pickupNames">Name(s) of person(s) who may pick up this child from VBS</label>
+                <input type="text" id="pickupNames" placeholder="Authorized pickup names" required>
+            </div>
+
             <button type="submit" id="submitBtn">Register Explorer</button>
         </form>
     </div>
