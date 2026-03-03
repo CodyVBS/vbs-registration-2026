@@ -14,21 +14,25 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let currentRoster = [];
 
-// --- ATTACHING TO WINDOW TO FIX "NOT A FUNCTION" ERRORS ---
+// --- ATTACH TO WINDOW TO FIX CONSOLE ERRORS ---
 
-window.toggleMyPass = () => {
+window.toggleMyPass = function() {
     const passInput = document.getElementById('passInput');
     const toggleBtn = document.getElementById('togglePass');
-    const isPass = passInput.type === 'password';
-    passInput.type = isPass ? 'text' : 'password';
-    toggleBtn.textContent = isPass ? 'Hide' : 'Show';
+    if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleBtn.textContent = 'Hide';
+    } else {
+        passInput.type = 'password';
+        toggleBtn.textContent = 'Show';
+    }
 };
 
-window.adminLogin = async () => {
+window.adminLogin = async function() {
     const userInput = document.getElementById('passInput').value;
     const errDiv = document.getElementById('err');
     try {
-        const configSnap = await getDoc(doc(doc(db, "config", "admin_settings")));
+        const configSnap = await getDoc(doc(db, "config", "admin_settings"));
         if (configSnap.exists() && userInput === configSnap.data().passcode) { 
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('adminContent').style.display = 'block';
@@ -38,6 +42,7 @@ window.adminLogin = async () => {
         }
     } catch (e) { 
         errDiv.textContent = "Login Error. Check database connection.";
+        console.error(e);
     }
 };
 
@@ -46,7 +51,7 @@ async function fetchChildren() {
         const querySnapshot = await getDocs(collection(db, "registrations"));
         currentRoster = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-        // Update accurate child count
+        // Corrected Count Logic
         document.getElementById('countDisplay').textContent = currentRoster.length;
         
         renderList(currentRoster);
@@ -78,7 +83,7 @@ function renderList(list) {
     });
 }
 
-window.downloadRoster = () => {
+window.downloadRoster = function() {
     // CSV Header with space between "Special" and "Notes"
     let csv = "Child,Grade,Parent,Phone,Email,Church,PickUp,Allergies,Special Notes\n";
     currentRoster.forEach(d => {
