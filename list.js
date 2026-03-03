@@ -14,6 +14,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let currentRoster = [];
 
+// Explicitly attach functions to window to prevent console errors
 window.toggleMyPass = () => {
     const p = document.getElementById('passInput');
     const b = document.getElementById('togglePass');
@@ -23,12 +24,18 @@ window.toggleMyPass = () => {
 
 window.adminLogin = async () => {
     const pass = document.getElementById('passInput').value;
-    const snap = await getDoc(doc(db, "config", "admin_settings"));
-    if (snap.exists() && pass === snap.data().passcode) {
-        document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('adminContent').style.display = 'block';
-        fetchRoster();
-    } else { document.getElementById('err').textContent = "Wrong passcode."; }
+    const errDiv = document.getElementById('err');
+    try {
+        const snap = await getDoc(doc(db, "config", "admin_settings"));
+        if (snap.exists() && pass === snap.data().passcode) {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
+            fetchRoster();
+        } else { errDiv.textContent = "Wrong passcode."; }
+    } catch (e) { 
+        errDiv.textContent = "Login Error. Check connection.";
+        console.error(e); 
+    }
 };
 
 async function fetchRoster() {
@@ -36,7 +43,7 @@ async function fetchRoster() {
     currentRoster = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     document.getElementById('countDisplay').textContent = currentRoster.length;
     
-    // Attach Search logic
+    // Attach Search Filter logic
     document.getElementById('adminSearch').oninput = (e) => {
         const val = e.target.value.toLowerCase();
         const filtered = currentRoster.filter(c => 
