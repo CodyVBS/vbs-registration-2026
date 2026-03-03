@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passInput = document.getElementById('passInput');
     const toggleBtn = document.getElementById('togglePass');
     
-    // Fixed Show Password Logic for PC
+    // Fixed Show Password Logic
     if (toggleBtn && passInput) {
         toggleBtn.onclick = (e) => {
             e.preventDefault();
@@ -42,9 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     errDiv.textContent = "Incorrect Password.";
                 }
-            } catch (e) { 
-                errDiv.textContent = "Access Denied. Check Firestore Rules.";
-            }
+            } catch (e) { errDiv.textContent = "Access Denied."; }
         });
     }
 });
@@ -57,7 +55,7 @@ async function fetchChildren() {
         allChildren = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
         if (csvContainer) {
-            // Layout ensures header and total count stay on one line
+            // Corrected count and single-line header
             csvContainer.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:20px;">
                     <h2 style="white-space: nowrap;">VBS 2026 Roster</h2>
@@ -78,14 +76,16 @@ function renderList(list) {
     list.forEach(data => {
         const li = document.createElement('li');
         li.style.cssText = "border-bottom:1px solid #eee; padding:15px 0; list-style:none;";
+        // Restored Home Church and Allergies labeling
         li.innerHTML = `
             <div>
                 <strong>${data.lastName}, ${data.firstName}</strong> (Grade: ${data.grade})<br>
                 <span style="font-size: 0.9em; color: #444;">
-                    <strong>Parent:</strong> ${data.parentName}<br>
+                    <strong>Parent:</strong> ${data.parentName} | <strong>Church:</strong> ${data.homeChurch || 'None'}<br>
                     <strong>Phone:</strong> ${data.phone} | <strong>Email:</strong> ${data.email}<br>
-                    <strong>Pick-up:</strong> ${data.pickupNames || 'N/A'}<br>
-                    <strong>Medical:</strong> ${data.medicalNotes || 'N/A'}
+                    <strong>Pick-up Auth:</strong> ${data.pickupNames || 'Not Provided'}<br>
+                    <strong>Allergies:</strong> ${data.medicalNotes || 'None'}<br>
+                    <strong>Special Notes:</strong> ${data.specialNotes || 'None'}
                 </span>
             </div>
             <button onclick="window.deleteEntry('${data.id}')" style="background:#e74c3c; width: auto; padding: 5px 10px; font-size: 12px; margin-top: 10px; cursor:pointer;">Delete</button>
@@ -95,9 +95,10 @@ function renderList(list) {
 }
 
 function downloadCSV() {
-    let csvContent = "data:text/csv;charset=utf-8,Child,Grade,Parent,Phone,Email,Church,PickUp,Medical\n";
+    // Fixed CSV Column Headers
+    let csvContent = "data:text/csv;charset=utf-8,Child,Grade,Parent,Phone,Email,Church,PickUp,Allergies,SpecialNotes\n";
     allChildren.forEach(d => {
-        csvContent += `"${d.firstName} ${d.lastName}","${d.grade}","${d.parentName}","${d.phone}","${d.email}","${d.homeChurch}","${d.pickupNames}","${d.medicalNotes}"\n`;
+        csvContent += `"${d.firstName} ${d.lastName}","${d.grade}","${d.parentName}","${d.phone}","${d.email}","${d.homeChurch}","${d.pickupNames}","${d.medicalNotes}","${d.specialNotes}"\n`;
     });
     const link = document.createElement("a");
     link.setAttribute("href", encodeURI(csvContent));
