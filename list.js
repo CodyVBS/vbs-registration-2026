@@ -12,103 +12,93 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-let allChildren = [];
+let currentRoster = [];
 
-document.addEventListener('DOMContentLoaded', () => {
+// --- 1. SHOW PASSWORD TOGGLE ---
+window.toggleMyPass = () => {
     const passInput = document.getElementById('passInput');
     const toggleBtn = document.getElementById('togglePass');
-    
-    // Fixed Show Password Logic
-    if (toggleBtn && passInput) {
-        toggleBtn.onclick = (e) => {
-            e.preventDefault();
-            const isPassword = passInput.type === 'password';
-            passInput.type = isPassword ? 'text' : 'password';
-            toggleBtn.textContent = isPassword ? 'Hide' : 'Show';
-        };
+    if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleBtn.textContent = 'Hide';
+    } else {
+        passInput.type = 'password';
+        toggleBtn.textContent = 'Show';
     }
+};
 
-    const loginBtn = document.getElementById('loginBtn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', async () => {
-            const userInput = passInput.value;
-            const errDiv = document.getElementById('err');
-            try {
-                const configSnap = await getDoc(doc(db, "config", "admin_settings"));
-                if (configSnap.exists() && userInput === configSnap.data().passcode) { 
-                    document.getElementById('loginOverlay').style.display = 'none';
-                    document.getElementById('adminContent').style.display = 'block';
-                    fetchChildren();
-                } else {
-                    errDiv.textContent = "Incorrect Password.";
-                }
-            } catch (e) { errDiv.textContent = "Access Denied."; }
-        });
-    }
-});
+// --- 2. LOGIN LOGIC ---
+window.adminLogin = async () => {
+    const userInput = document.getElementById('passInput').value;
+    const errDiv = document.getElementById('err');
+    try {
+        const configSnap = await getDoc(doc(db, "config", "admin_settings"));
+        if (configSnap.exists() && userInput === configSnap.data().passcode) { 
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
+            fetchChildren();
+        } else {
+            errDiv.textContent = "Incorrect Password.";
+        }
+    } catch (e) { errDiv.textContent = "Error: " + e.message; }
+};
 
+// --- 3. FETCH & COUNT ---
 async function fetchChildren() {
     const explorerList = document.getElementById('explorerList');
-    const csvContainer = document.getElementById('csvContainer');
     try {
         const querySnapshot = await getDocs(collection(db, "registrations"));
-        allChildren = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        currentRoster = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-        if (csvContainer) {
-            // Corrected count and single-line header
-            csvContainer.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:20px;">
-                    <h2 style="white-space: nowrap;">VBS 2026 Roster</h2>
-                    <button id="downloadCSV" style="width: auto; background: #27ae60; margin-left: 20px;">Download Roster</button>
-                    <span style="font-weight:bold;">Total Children: ${allChildren.length}</span>
-                </div>
-            `;
-            document.getElementById('downloadCSV').onclick = downloadCSV;
-        }
-        renderList(allChildren);
+        // Update Total Children Count accurately
+        document.getElementById('countDisplay').textContent = currentRoster.length;
+        
+        renderList(currentRoster);
     } catch (e) { console.error(e); }
 }
 
 function renderList(list) {
     const explorerList = document.getElementById('explorerList');
-    if (!explorerList) return;
     explorerList.innerHTML = "";
     list.forEach(data => {
         const li = document.createElement('li');
         li.style.cssText = "border-bottom:1px solid #eee; padding:15px 0; list-style:none;";
-        // Restored Home Church and Allergies labeling
         li.innerHTML = `
             <div>
                 <strong>${data.lastName}, ${data.firstName}</strong> (Grade: ${data.grade})<br>
                 <span style="font-size: 0.9em; color: #444;">
                     <strong>Parent:</strong> ${data.parentName} | <strong>Church:</strong> ${data.homeChurch || 'None'}<br>
-                    <strong>Phone:</strong> ${data.phone} | <strong>Email:</strong> ${data.email}<br>
-                    <strong>Pick-up Auth:</strong> ${data.pickupNames || 'Not Provided'}<br>
+                    <strong>Pick-up:</strong> ${data.pickupNames || 'N/A'}<br>
                     <strong>Allergies:</strong> ${data.medicalNotes || 'None'}<br>
-                    <strong>Special Notes:</strong> ${data.specialNotes || 'None'}
+                    <strong>Notes:</strong> ${data.specialNotes || 'None'}
                 </span>
             </div>
-            <button onclick="window.deleteEntry('${data.id}')" style="background:#e74c3c; width: auto; padding: 5px 10px; font-size: 12px; margin-top: 10px; cursor:pointer;">Delete</button>
+            <button onclick="window.deleteEntry('${data.id}')" style="background:#e74c3c; width: auto; padding: 5px 10px; font-size: 12px; margin-top:10px;">Delete</button>
         `;
         explorerList.appendChild(li);
     });
 }
 
-function downloadCSV() {
-    // Fixed CSV Column Headers
-    let csvContent = "data:text/csv;charset=utf-8,Child,Grade,Parent,Phone,Email,Church,PickUp,Allergies,SpecialNotes\n";
-    allChildren.forEach(d => {
-        csvContent += `"${d.firstName} ${d.lastName}","${d.grade}","${d.parentName}","${d.phone}","${d.email}","${d.homeChurch}","${d.pickupNames}","${d.medicalNotes}","${d.specialNotes}"\n`;
+// --- 4. DOWNLOAD CSV ---
+window.downloadRoster = () => {
+    if (currentRoster.length === 0) {
+        alert("Roster is empty.");
+        return;
+    }
+    let csv = "Child,Grade,Parent,Phone,Email,Church,PickUp,Allergies,SpecialNotes\n";
+    currentRoster.forEach(d => {
+        csv += `"${d.firstName} ${d.lastName}","${d.grade}","${d.parentName}","${d.phone}","${d.email}","${d.homeChurch}","${d.pickupNames}","${d.medicalNotes}","${d.specialNotes}"\n`;
     });
-    const link = document.createElement("a");
-    link.setAttribute("href", encodeURI(csvContent));
-    link.setAttribute("download", "VBS_Roster_2026.csv");
-    document.body.appendChild(link);
-    link.click();
-}
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'VBS_Roster_2026.csv');
+    a.click();
+};
 
 window.deleteEntry = async (id) => {
-    if (confirm("Delete this child's record?")) {
+    if (confirm("Delete this child?")) {
         await deleteDoc(doc(db, "registrations", id));
         fetchChildren();
     }
