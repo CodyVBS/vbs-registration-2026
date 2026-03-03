@@ -1,6 +1,5 @@
 /* VBS 2026 Registration Styles 
    Theme: Waterfall Explorer (Blue & Sunset Orange)
-   Location: Cody, Wyoming
 */
 
 body {
@@ -18,138 +17,91 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    max-width: 850px;
+    max-width: 900px; /* Slightly wider for the header layout */
     width: 100%;
-    box-sizing: border-box; /* Prevents search bar from extending past border */
+    box-sizing: border-box;
 }
 
-h1, h2 { 
-    color: #1e3c72; 
-    text-align: center; 
-    margin-bottom: 20px; 
-}
-
-/* --- Admin Roster Header Spacing Fixes --- */
+/* --- FIXED ADMIN HEADER SPACING --- */
 .csv-btn-center {
     border-bottom: 2px solid #eee;
-    padding: 10px 0 25px 0; /* Extra room top and bottom */
-    margin-bottom: 25px;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Pushes Title/Button/Count apart */
     align-items: center;
+    gap: 25px; /* Forced breathing room between elements */
     width: 100%;
 }
 
 h2 {
+    color: #1e3c72;
     margin: 0;
-    white-space: nowrap; /* Keeps title on one line */
+    white-space: nowrap;
+    font-size: 24px;
 }
 
 #downloadCSV {
-    width: auto;
     background-color: #27ae60;
-    padding: 12px 30px; /* Increased padding inside the button */
-    margin: 0 25px; /* Added significant side margins to prevent tightness */
     color: white;
+    padding: 12px 20px;
     border: none;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
-}
-
-#downloadCSV:hover {
-    background-color: #219150;
+    white-space: nowrap;
+    flex-shrink: 0; /* Prevents button from squishing */
 }
 
 #countParent {
     font-weight: bold;
     color: #1e3c72;
-    min-width: 150px; /* Ensures count doesn't crowd the button */
+    white-space: nowrap;
     text-align: right;
 }
 
-/* --- Search Bar & Roster List --- */
+/* --- SEARCH BAR --- */
 #adminSearch {
     width: 100%;
-    margin: 25px 0;
+    margin-bottom: 25px;
     border: 2px solid #1e3c72;
     border-radius: 25px;
-    padding: 12px 20px;
+    padding: 12px 25px;
     box-sizing: border-box;
+    font-size: 16px;
     outline: none;
 }
 
-#explorerList { 
-    padding: 0; 
-    list-style: none; 
-}
+/* --- ROSTER CARDS --- */
+#explorerList { padding: 0; list-style: none; }
 
 #explorerList li {
-    background: #f9f9f9;
-    margin: 0 0 15px 15px; /* 15px Left margin for cards */
+    background: #f4f7f9;
+    margin: 0 0 15px 15px; /* 15px Left Margin for cards */
     padding: 20px;
     border-radius: 8px;
-    border-left: 5px solid #1e3c72;
+    border-left: 6px solid #1e3c72;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* --- Registration Form & Login --- */
-.form-group { 
-    margin-bottom: 18px; 
-    display: flex; 
-    flex-direction: column; 
-}
-
-label { 
-    font-weight: bold; 
-    margin-bottom: 6px; 
-    color: #2c3e50; 
-}
-
-input, select, textarea { 
-    padding: 12px; 
-    border: 2px solid #ddd; 
-    border-radius: 6px; 
-    font-size: 16px; 
-    box-sizing: border-box; 
-}
-
-button {
-    width: 100%; 
-    padding: 15px; 
-    background-color: #f39c12; 
-    color: white;
-    border: none; 
-    border-radius: 6px; 
-    font-size: 18px; 
-    font-weight: bold; 
-    cursor: pointer;
-}
-
+/* --- LOGIN SCREEN --- */
 #loginBtn { 
     width: 250px; 
     margin: 25px auto; 
     display: block; 
-}
-
-.pass-wrapper { 
-    display: flex; 
-    gap: 10px; 
-    justify-content: center; 
-    margin: 20px 0; 
-}
-
-#togglePass { 
-    width: auto; 
-    background-color: #7f8c8d; 
-    padding: 0 15px; 
-}
-
-.delete-btn { 
-    width: auto; 
-    padding: 8px 15px; 
-    font-size: 13px; 
-    background: #e74c3c; 
-    margin-top: 15px; 
+    padding: 15px;
+    background-color: #f39c12;
     color: white;
-    border-radius: 4px;
+    font-size: 18px;
+    border-radius: 6px;
+    border: none;
+    font-weight: bold;
 }
+
+.pass-wrapper { display: flex; gap: 10px; justify-content: center; margin: 25px 0; }
+
+#passInput { padding: 12px; border: 2px solid #ddd; border-radius: 6px; width: 220px; }
+
+#togglePass { width: auto; background-color: #7f8c8d; padding: 0 15px; color: white; border: none; border-radius: 6px; }
+
+.delete-btn { background: #e74c3c; color: white; padding: 8px 15px; border: none; border-radius: 4px; margin-top: 15px; cursor: pointer; }
