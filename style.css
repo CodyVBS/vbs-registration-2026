@@ -17,9 +17,9 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    max-width: 800px; /* Increased for better roster view */
+    max-width: 850px; /* Slightly wider for the roster */
     width: 100%;
-    box-sizing: border-box; /* Ensures padding doesn't push container out */
+    box-sizing: border-box;
 }
 
 h1, h2 {
@@ -27,42 +27,43 @@ h1, h2 {
     margin: 0;
 }
 
-/* --- Admin Roster Header Fixes --- */
+/* --- Admin Roster Header Spacing --- */
 .csv-btn-center {
     border-bottom: 2px solid #eee;
-    padding-bottom: 15px;
-    margin-bottom: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-/* Fixed Search Box extending past border */
+/* Added breathing room for Download button */
+#downloadCSV {
+    background-color: #27ae60;
+    color: white;
+    padding: 12px 25px; /* Increased padding */
+    width: auto;
+    margin: 0 15px; /* Space between title and count */
+}
+
+#downloadCSV:hover {
+    background-color: #219150;
+}
+
+/* --- Search Box Fix --- */
 #adminSearch {
     width: 100%;
-    margin: 15px 0;
+    margin: 20px 0;
     border: 2px solid #1e3c72;
     border-radius: 25px;
     padding: 12px 20px;
     font-size: 16px;
-    box-sizing: border-box; /* CRITICAL: Keeps search bar inside the border */
+    box-sizing: border-box;
     outline: none;
 }
 
-#adminSearch:focus {
-    border-color: #f39c12;
-}
-
-/* Total Children Alignment */
-#countDisplayParent {
-    font-weight: bold;
-    color: #1e3c72;
-    white-space: nowrap;
-    margin-left: 15px;
-}
-
-/* Roster List Items */
+/* --- Roster Card Spacing --- */
 #explorerList {
     padding: 0;
     list-style: none;
@@ -70,41 +71,24 @@ h1, h2 {
 
 #explorerList li {
     background: #f9f9f9;
-    margin-bottom: 15px;
+    margin: 0 0 15px 15px; /* Added 15px Left Margin for cards */
     padding: 20px;
     border-radius: 8px;
     border-left: 5px solid #1e3c72;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-/* Buttons */
-button {
-    cursor: pointer;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    transition: 0.3s;
-}
-
-#downloadCSV {
-    background-color: #27ae60;
+/* --- Login Button Fix --- */
+#loginBtn {
+    width: 250px; /* Made button bigger */
+    margin: 25px auto;
+    display: block;
+    background-color: #f39c12;
     color: white;
-    padding: 10px 20px;
-    width: auto;
+    padding: 15px;
+    font-size: 18px;
 }
 
-#downloadCSV:hover {
-    background-color: #219150;
-}
-
-.delete-btn {
-    background-color: #e74c3c;
-    color: white;
-    padding: 8px 15px;
-    margin-top: 10px;
-}
-
-/* Login Page Specifics */
 .pass-wrapper {
     display: flex;
     gap: 10px;
@@ -113,8 +97,24 @@ button {
 }
 
 #passInput {
-    padding: 10px;
+    padding: 12px;
     border: 2px solid #ddd;
     border-radius: 6px;
-    width: 200px;
+    width: 220px;
+}
+
+/* Generic Button Styles */
+button {
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 15px;
+    margin-top: 10px;
 }
