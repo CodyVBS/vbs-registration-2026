@@ -1,5 +1,6 @@
 /* VBS 2026 Registration Styles 
    Theme: Waterfall Explorer (Blue & Sunset Orange)
+   Location: Cody, Wyoming
 */
 
 body {
@@ -19,36 +20,55 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     max-width: 850px;
     width: 100%;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Prevents search bar from extending past border */
 }
 
-h1, h2 { color: #1e3c72; text-align: center; margin-bottom: 20px; }
+h1, h2 { 
+    color: #1e3c72; 
+    text-align: center; 
+    margin-bottom: 20px; 
+}
 
-/* Admin Header Spacing Fixes */
+/* --- Admin Roster Header Spacing Fixes --- */
 .csv-btn-center {
     border-bottom: 2px solid #eee;
-    padding: 10px 0 25px 0;
+    padding: 10px 0 25px 0; /* Extra room top and bottom */
     margin-bottom: 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+}
+
+h2 {
+    margin: 0;
+    white-space: nowrap; /* Keeps title on one line */
 }
 
 #downloadCSV {
     width: auto;
     background-color: #27ae60;
-    padding: 12px 25px; /* Spacing inside button */
-    margin: 0 20px; /* Spacing between title and count */
+    padding: 12px 30px; /* Increased padding inside the button */
+    margin: 0 25px; /* Added significant side margins to prevent tightness */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#downloadCSV:hover {
+    background-color: #219150;
 }
 
 #countParent {
     font-weight: bold;
     color: #1e3c72;
-    min-width: 140px;
+    min-width: 150px; /* Ensures count doesn't crowd the button */
     text-align: right;
 }
 
-/* Search Bar Fix */
+/* --- Search Bar & Roster List --- */
 #adminSearch {
     width: 100%;
     margin: 25px 0;
@@ -56,31 +76,80 @@ h1, h2 { color: #1e3c72; text-align: center; margin-bottom: 20px; }
     border-radius: 25px;
     padding: 12px 20px;
     box-sizing: border-box;
+    outline: none;
 }
 
-/* Card Spacing */
-#explorerList { padding: 0; list-style: none; }
+#explorerList { 
+    padding: 0; 
+    list-style: none; 
+}
 
 #explorerList li {
     background: #f9f9f9;
-    margin: 0 0 15px 15px; /* 15px left margin */
+    margin: 0 0 15px 15px; /* 15px Left margin for cards */
     padding: 20px;
     border-radius: 8px;
     border-left: 5px solid #1e3c72;
 }
 
-/* Form Styles */
-.form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
-label { font-weight: bold; margin-bottom: 6px; color: #2c3e50; }
-input, select, textarea { padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
-input:focus { border-color: #f39c12; outline: none; }
-
-button {
-    width: 100%; padding: 15px; background-color: #f39c12; color: white;
-    border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s;
+/* --- Registration Form & Login --- */
+.form-group { 
+    margin-bottom: 18px; 
+    display: flex; 
+    flex-direction: column; 
 }
 
-#loginBtn { width: 250px; margin: 25px auto; display: block; }
-.pass-wrapper { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
-#togglePass { width: auto; background-color: #7f8c8d; padding: 0 15px; }
-.delete-btn { width: auto; padding: 8px 15px; font-size: 13px; background: #e74c3c; margin-top: 15px; }
+label { 
+    font-weight: bold; 
+    margin-bottom: 6px; 
+    color: #2c3e50; 
+}
+
+input, select, textarea { 
+    padding: 12px; 
+    border: 2px solid #ddd; 
+    border-radius: 6px; 
+    font-size: 16px; 
+    box-sizing: border-box; 
+}
+
+button {
+    width: 100%; 
+    padding: 15px; 
+    background-color: #f39c12; 
+    color: white;
+    border: none; 
+    border-radius: 6px; 
+    font-size: 18px; 
+    font-weight: bold; 
+    cursor: pointer;
+}
+
+#loginBtn { 
+    width: 250px; 
+    margin: 25px auto; 
+    display: block; 
+}
+
+.pass-wrapper { 
+    display: flex; 
+    gap: 10px; 
+    justify-content: center; 
+    margin: 20px 0; 
+}
+
+#togglePass { 
+    width: auto; 
+    background-color: #7f8c8d; 
+    padding: 0 15px; 
+}
+
+.delete-btn { 
+    width: auto; 
+    padding: 8px 15px; 
+    font-size: 13px; 
+    background: #e74c3c; 
+    margin-top: 15px; 
+    color: white;
+    border-radius: 4px;
+}
