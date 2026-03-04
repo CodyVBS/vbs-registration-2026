@@ -19,20 +19,20 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     max-width: 900px; 
     width: 100%;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Prevents overflow of internal elements */
 }
 
 h1, h2 { color: #1e3c72; text-align: center; margin-bottom: 20px; }
 
-/* --- ADMIN HEADER: VERTICAL LAYOUT --- */
+/* --- ADMIN HEADER: VERTICAL STACKING --- */
 .csv-btn-center {
     border-bottom: 2px solid #eee;
     padding-bottom: 20px;
     margin-bottom: 30px;
     display: flex;
-    flex-direction: column; /* Moves items below each other */
-    align-items: center;    /* Centers everything vertically */
-    gap: 10px;              /* Space between title, count, and button */
+    flex-direction: column; /* Moves button below count */
+    align-items: center;    /* Centers items horizontally */
+    gap: 8px;               /* Tight spacing between lines */
     width: 100%;
 }
 
@@ -47,13 +47,14 @@ h2 { margin: 0; font-size: 24px; }
 #downloadCSV {
     background-color: #27ae60;
     color: white;
-    padding: 8px 15px;      /* Smaller padding */
-    font-size: 14px;        /* Smaller font */
+    padding: 6px 14px;      /* Smaller button size */
+    font-size: 13px;        /* Shrunk font size */
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     font-weight: bold;
     cursor: pointer;
-    width: auto;            /* Only as wide as the text */
+    width: auto;            /* Button stays small to fit text */
+    margin-top: 5px;
 }
 
 #downloadCSV:hover { background-color: #219150; }
@@ -65,16 +66,16 @@ h2 { margin: 0; font-size: 24px; }
     border: 2px solid #1e3c72;
     border-radius: 25px;
     padding: 12px 25px;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Keeps search bar inside container borders */
     font-size: 16px;
     outline: none;
 }
 
-/* --- ROSTER CARDS & SUBTLE DELETE BUTTON --- */
+/* --- ROSTER CARDS & SHRUNK DELETE BUTTON --- */
 #explorerList { padding: 0; list-style: none; }
 #explorerList li {
     background: #f4f7f9;
-    margin: 0 0 15px 15px; 
+    margin: 0 0 15px 15px; /* 15px Left Margin for cards */
     padding: 20px;
     border-radius: 8px;
     border-left: 6px solid #1e3c72;
@@ -83,17 +84,17 @@ h2 { margin: 0; font-size: 24px; }
 .delete-btn { 
     background: #e74c3c; 
     color: white; 
-    padding: 5px 12px; 
+    padding: 4px 10px;      /* Shrunk delete button */
     border: none; 
     border-radius: 4px; 
-    font-size: 11px; 
+    font-size: 11px;        /* Smaller delete text */
     cursor: pointer;
     margin-top: 10px;
     font-weight: bold;
     width: auto;
 }
 
-/* --- FORM ELEMENTS (REGISTRATION PAGE) --- */
+/* --- REGISTRATION FORM ELEMENTS --- */
 .form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
 label { font-weight: bold; margin-bottom: 6px; color: #2c3e50; }
 input, select, textarea { padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
@@ -104,7 +105,7 @@ button {
     border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer;
 }
 
-/* --- LOGIN SCREEN --- */
+/* --- ADMIN LOGIN SCREEN --- */
 #loginBtn { width: 250px; margin: 25px auto; display: block; }
-.pass-wrapper { display: flex; gap: 10px; justify-content: center; margin: 25px 0; }
+.pass-wrapper { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
 #togglePass { width: auto; background-color: #7f8c8d; padding: 0 15px; color: white; border-radius: 6px; border: none; }
