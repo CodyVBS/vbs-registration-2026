@@ -4,6 +4,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* Restored Sunset/Deep Blue Background */
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
     display: flex;
     justify-content: center;
@@ -19,12 +20,12 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     max-width: 900px; 
     width: 100%;
-    box-sizing: border-box; /* Keeps all elements inside the border */
+    box-sizing: border-box; /* Critical for container containment */
 }
 
 h1, h2 { color: #1e3c72; text-align: center; margin-bottom: 20px; }
 
-/* --- FIXED ADMIN HEADER & BUTTON OVERFLOW --- */
+/* Admin Header Fix - Prevents Download Roster button overflow */
 .csv-btn-center {
     border-bottom: 2px solid #eee;
     padding-bottom: 20px;
@@ -32,7 +33,7 @@ h1, h2 { color: #1e3c72; text-align: center; margin-bottom: 20px; }
     display: flex;
     justify-content: space-between; 
     align-items: center;
-    flex-wrap: wrap; /* Allows items to drop to next line if screen is too narrow */
+    flex-wrap: wrap; /* Prevents overflow */
     gap: 15px; 
     width: 100%;
 }
@@ -48,12 +49,11 @@ h2 { margin: 0; white-space: nowrap; font-size: 22px; }
     font-weight: bold;
     cursor: pointer;
     white-space: nowrap;
-    max-width: fit-content; /* Prevents button from expanding past its needs */
 }
 
 #countParent { font-weight: bold; color: #1e3c72; white-space: nowrap; }
 
-/* --- SEARCH BAR --- */
+/* Search Bar */
 #adminSearch {
     width: 100%;
     margin-bottom: 25px;
@@ -65,16 +65,25 @@ h2 { margin: 0; white-space: nowrap; font-size: 22px; }
     outline: none;
 }
 
-/* --- ROSTER CARDS & SHRUNK DELETE BUTTON --- */
-#explorerList { padding: 0; list-style: none; }
+/* Form Styles */
+.form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
+label { font-weight: bold; margin-bottom: 6px; color: #2c3e50; }
+input, select, textarea { padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
+input:focus { border-color: #f39c12; outline: none; }
 
+button {
+    width: 100%; padding: 15px; background-color: #f39c12; color: white;
+    border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer;
+}
+
+/* Roster Cards & Subtle Delete Button */
+#explorerList { padding: 0; list-style: none; }
 #explorerList li {
     background: #f4f7f9;
-    margin: 0 0 15px 15px; 
+    margin: 0 0 15px 15px; /* 15px Left Margin */
     padding: 20px;
     border-radius: 8px;
     border-left: 6px solid #1e3c72;
-    position: relative; /* For positioning the smaller delete button */
 }
 
 .delete-btn { 
@@ -83,15 +92,14 @@ h2 { margin: 0; white-space: nowrap; font-size: 22px; }
     padding: 5px 12px; /* Shrunk padding */
     border: none; 
     border-radius: 4px; 
-    font-size: 11px; /* Shrunk font size */
+    font-size: 11px; /* Shrunk font */
     cursor: pointer;
     margin-top: 10px;
     font-weight: bold;
-    width: auto; /* Ensures it doesn't span full width */
+    width: auto;
 }
 
-/* --- LOGIN & FORM --- */
+/* Login Screen */
+#loginBtn { width: 250px; margin: 25px auto; display: block; }
 .pass-wrapper { display: flex; gap: 10px; justify-content: center; margin: 25px 0; }
-#passInput { padding: 12px; border: 2px solid #ddd; border-radius: 6px; width: 220px; }
 #togglePass { width: auto; background-color: #7f8c8d; padding: 0 15px; color: white; border-radius: 6px; border: none; }
-#loginBtn { width: 250px; margin: 25px auto; display: block; padding: 15px; background: #f39c12; color: white; border: none; border-radius: 6px; font-weight: bold; }
