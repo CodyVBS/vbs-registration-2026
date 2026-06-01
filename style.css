@@ -25,14 +25,14 @@ body {
 
 h1, h2 { color: #1e3c72; text-align: center; margin-bottom: 25px; }
 
-/* --- NEW DATE & TIME STYLING --- */
+/* --- DATE & TIME STYLING: BURNT ORANGE & LARGER --- */
 .vbs-dates {
     text-align: center;
-    font-size: 1.2rem;
-    color: #1e3c72;
+    font-size: calc(1.2rem + 2pt); /* Increased size by 2pts */
+    color: #e67e22;                /* Burnt Orange color */
     font-weight: bold;
     margin-bottom: 30px;
-    margin-top: -15px; /* Pulls it closer to the h1 title */
+    margin-top: -15px; 
 }
 
 /* Banner Styling */
@@ -105,6 +105,6 @@ button { width: 100%; padding: 18px; background-color: #f39c12; color: white; bo
 @media (max-width: 600px) {
     .container { padding: 20px; width: 98vw; }
     h1 { font-size: 22px; }
-    .vbs-dates { font-size: 1rem; margin-bottom: 20px; }
+    .vbs-dates { font-size: 1.1rem; margin-bottom: 20px; }
     button { padding: 15px; font-size: 18px; }
 }
